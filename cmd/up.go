@@ -63,8 +63,9 @@ type UpCmd struct {
 
 	SSHConfigPath string
 
-	DotfilesSource string
-	DotfilesScript string
+	DotfilesSource        string
+	DotfilesScript        string
+	DotfilesScriptEnvFile []string
 }
 
 // NewUpCmd creates a new up command
@@ -96,6 +97,7 @@ func NewUpCmd(f *flags.GlobalFlags) *cobra.Command {
 	upCmd.Flags().StringVar(&cmd.SSHConfigPath, "ssh-config", "", "The path to the ssh config to modify, if empty will use ~/.ssh/config")
 	upCmd.Flags().StringVar(&cmd.DotfilesSource, "dotfiles", "", "The path or url to the dotfiles to use in the container")
 	upCmd.Flags().StringVar(&cmd.DotfilesScript, "dotfiles-script", "", "The path in dotfiles directory to use to install the dotfiles, if empty will try to guess")
+	upCmd.Flags().StringSliceVar(&cmd.DotfilesScriptEnvFile, "dotfiles-script-env-file", []string{}, "The path to file containing environment variables to set for the dotfiles install script")
 	upCmd.Flags().StringArrayVar(&cmd.IDEOptions, "ide-option", []string{}, "IDE option in the form KEY=VALUE")
 	upCmd.Flags().StringVar(&cmd.DevContainerImage, "devcontainer-image", "", "The container image to use, this will override the devcontainer.json value in the project")
 	upCmd.Flags().StringVar(&cmd.DevContainerPath, "devcontainer-path", "", "The path to the devcontainer.json relative to the project")
@@ -200,7 +202,7 @@ func (cmd *UpCmd) Run(
 	}
 
 	// setup dotfiles in the container
-	err = setupDotfiles(cmd.DotfilesSource, cmd.DotfilesScript, client, devPodConfig, log)
+	err = setupDotfiles(cmd.DotfilesSource, cmd.DotfilesScript, cmd.DotfilesScriptEnvFile, client, devPodConfig, log)
 	if err != nil {
 		return err
 	}
@@ -991,6 +993,7 @@ func createSSHCommand(
 
 func setupDotfiles(
 	dotfiles, script string,
+	envFiles []string,
 	client client2.BaseWorkspaceClient,
 	devPodConfig *config.Config,
 	log log.Logger,
@@ -1033,8 +1036,20 @@ func setupDotfiles(
 	if dotfilesScript != "" {
 		log.Infof("Dotfiles script %s specified", dotfilesScript)
 
-		agentArguments = append(agentArguments, "--install-script")
-		agentArguments = append(agentArguments, dotfilesScript)
+		dotfilesScriptEnvFilesStr := devPodConfig.ContextOption(config.ContextOptionDotfilesScriptEnvFiles)
+		if len(envFiles) == 0 && dotfilesScriptEnvFilesStr != "" {
+			envFiles = strings.Split(dotfilesScriptEnvFilesStr, ",")
+		}
+
+		for _, file := range envFiles {
+			envFromFile, err := config2.ParseKeyValueFile(file)
+			if err != nil {
+				return err
+			}
+			agentArguments = append(agentArguments, "--install-script-env", strings.Join(envFromFile, ","))
+		}
+
+		agentArguments = append(agentArguments, "--install-script", dotfilesScript)
 	}
 
 	remoteUser, err := devssh.GetUser(client.WorkspaceConfig().ID, client.WorkspaceConfig().SSHConfigPath)

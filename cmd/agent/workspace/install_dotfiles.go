@@ -19,8 +19,9 @@ import (
 type InstallDotfilesCmd struct {
 	*flags.GlobalFlags
 
-	Repository    string
-	InstallScript string
+	Repository       string
+	InstallScript    string
+	InstallScriptEnv []string
 }
 
 // NewInstallDotfilesCmd creates a new command
@@ -38,6 +39,7 @@ func NewInstallDotfilesCmd(flags *flags.GlobalFlags) *cobra.Command {
 	}
 	installDotfilesCmd.Flags().StringVar(&cmd.Repository, "repository", "", "The dotfiles repository")
 	installDotfilesCmd.Flags().StringVar(&cmd.InstallScript, "install-script", "", "The dotfiles install command to execute")
+	installDotfilesCmd.Flags().StringSliceVar(&cmd.InstallScriptEnv, "install-script-env", []string{}, "The environment variables to set for the dotfiles install script. E.g. MY_ENV_VAR=MY_VALUE")
 	return installDotfilesCmd
 }
 
@@ -79,7 +81,7 @@ func (cmd *InstallDotfilesCmd) Run(ctx context.Context) error {
 		writer := logger.Writer(logrus.InfoLevel, false)
 		scriptCmd.Stdout = writer
 		scriptCmd.Stderr = writer
-
+		scriptCmd.Env = append(scriptCmd.Env, cmd.InstallScriptEnv...)
 		return scriptCmd.Run()
 	}
 
