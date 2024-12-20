@@ -17,6 +17,7 @@ const (
 	ContextOptionAgentURL                   = "AGENT_URL"
 	ContextOptionDotfilesURL                = "DOTFILES_URL"
 	ContextOptionDotfilesScript             = "DOTFILES_SCRIPT"
+	ContextOptionDotfilesScriptEnvFiles     = "DOTFILES_SCRIPT_ENV_FILES"
 	ContextOptionSSHAgentForwarding         = "SSH_AGENT_FORWARDING"
 	ContextOptionSSHConfigPath              = "SSH_CONFIG_PATH"
 	ContextOptionAgentInjectTimeout         = "AGENT_INJECT_TIMEOUT"
@@ -83,6 +84,10 @@ var ContextOptions = []ContextOption{
 	{
 		Name:        ContextOptionDotfilesScript,
 		Description: "Specifies the script to run after cloning dotfiles repo to install them",
+	},
+	{
+		Name:        ContextOptionDotfilesScriptEnvFiles,
+		Description: "Specifies the comma-separated paths to local .env files to source environment variables from to pass to the dotfiles install script",
 	},
 	{
 		Name:        ContextOptionSSHConfigPath,

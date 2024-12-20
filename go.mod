@@ -23,6 +23,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/joho/godotenv v1.5.1
 	github.com/loft-sh/agentapi/v4 v4.2.0-alpha.6
+	github.com/loft-sh/analytics-client v0.0.0-20240219162240-2f4c64b2494e
 	github.com/loft-sh/api/v4 v4.0.0-alpha.6.0.20241129074910-a24d4104d586
 	github.com/loft-sh/log v0.0.0-20240219160058-26d83ffb46ac
 	github.com/loft-sh/programming-language-detection v0.0.5
@@ -35,12 +36,13 @@ require (
 	github.com/onsi/gomega v1.34.2
 	github.com/otiai10/copy v1.7.0
 	github.com/pkg/errors v0.9.1
-	github.com/pkg/sftp v1.13.6-0.20230213180117-971c283182b6
+	github.com/pkg/sftp v1.13.6
 	github.com/rhysd/go-github-selfupdate v1.2.3
 	github.com/sirupsen/logrus v1.9.3
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.5
+	github.com/spf13/viper v1.19.0
 	github.com/takama/daemon v1.0.0
 	github.com/tidwall/jsonc v0.3.2
 	golang.org/x/crypto v0.27.0
@@ -146,6 +148,7 @@ require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/in-toto/in-toto-golang v0.5.0 // indirect
 	github.com/inconshreveable/go-update v0.0.0-20160112193335-8152e7eb6ccf // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
@@ -155,13 +158,14 @@ require (
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
 	github.com/loft-sh/admin-apis v0.0.0-20241127134028-9cfb6b23ec44 // indirect
-	github.com/loft-sh/analytics-client v0.0.0-20240219162240-2f4c64b2494e // indirect
 	github.com/loft-sh/apiserver v0.0.0-20241008120650-f17d504a4d0d // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
+	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-localereader v0.0.1 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/mitchellh/hashstructure/v2 v2.0.2 // indirect
+	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/moby/docker-image-spec v1.3.1 // indirect
 	github.com/moby/locker v1.0.1 // indirect
 	github.com/moby/spdystream v0.5.0 // indirect
@@ -175,15 +179,22 @@ require (
 	github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/opencontainers/image-spec v1.1.0 // indirect
+	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10 // indirect
 	github.com/prometheus/client_golang v1.20.5 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.60.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
+	github.com/sagikazarmark/locafero v0.4.0 // indirect
+	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/secure-systems-lab/go-securesystemslib v0.4.0 // indirect
 	github.com/shibumi/go-pathspec v1.3.0 // indirect
+	github.com/sourcegraph/conc v0.3.0 // indirect
+	github.com/spf13/afero v1.11.0 // indirect
+	github.com/spf13/cast v1.6.0 // indirect
 	github.com/stoewer/go-strcase v1.3.0 // indirect
+	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/tcnksm/go-gitconfig v0.1.2 // indirect
 	github.com/tonistiigi/go-csvvalue v0.0.0-20240710180619-ddb21b71c0b4 // indirect
 	github.com/ulikunitz/xz v0.5.9 // indirect
@@ -212,6 +223,7 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240930140551-af27646dc61f // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.12.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
+	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	k8s.io/apiextensions-apiserver v0.31.1 // indirect
 	k8s.io/apiserver v0.31.1 // indirect

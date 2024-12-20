@@ -8,19 +8,22 @@ import (
 	"strings"
 
 	"github.com/loft-sh/devpod/cmd/flags"
+	"github.com/loft-sh/devpod/pkg/config"
 	"github.com/loft-sh/devpod/pkg/git"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // InstallDotfilesCmd holds the installDotfiles cmd flags
 type InstallDotfilesCmd struct {
 	*flags.GlobalFlags
 
-	Repository    string
-	InstallScript string
+	Repository       string
+	InstallScript    string
+	InstallScriptEnv []string
 }
 
 // NewInstallDotfilesCmd creates a new command
@@ -38,6 +41,8 @@ func NewInstallDotfilesCmd(flags *flags.GlobalFlags) *cobra.Command {
 	}
 	installDotfilesCmd.Flags().StringVar(&cmd.Repository, "repository", "", "The dotfiles repository")
 	installDotfilesCmd.Flags().StringVar(&cmd.InstallScript, "install-script", "", "The dotfiles install command to execute")
+	installDotfilesCmd.Flags().StringSliceVar(&cmd.InstallScriptEnv, "install-script-env", []string{}, "The environment variables to set for the dotfiles install script. E.g. MY_ENV_VAR=MY_VALUE")
+	viper.BindPFlag("install-script-env", installDotfilesCmd.Flags().Lookup(config.DotfilesScriptEnvVar))
 	return installDotfilesCmd
 }
 
@@ -79,7 +84,7 @@ func (cmd *InstallDotfilesCmd) Run(ctx context.Context) error {
 		writer := logger.Writer(logrus.InfoLevel, false)
 		scriptCmd.Stdout = writer
 		scriptCmd.Stderr = writer
-
+		scriptCmd.Env = append(scriptCmd.Env, cmd.InstallScriptEnv...)
 		return scriptCmd.Run()
 	}
 
