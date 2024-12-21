@@ -1111,7 +1111,7 @@ func buildDotCmd(dotfilesRepo, dotfilesScript string, envFiles []string, devPodC
 
 	if len(dotfilesScriptEnvSlice) > 0 {
 		joinedVars := strings.Join(dotfilesScriptEnvSlice, ",")
-		dotCmd.Env = append(dotCmd.Env, fmt.Sprintf("%s=%s", config.DotfilesScriptEnvVar, joinedVars))
+		dotCmd.Env = append(os.Environ(), fmt.Sprintf("%s=%s", config.DotfilesScriptEnvVar, joinedVars))
 	}
 
 	return dotCmd, nil
