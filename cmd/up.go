@@ -1029,7 +1029,7 @@ func setupDotfiles(
 		dotCmd.Args = append(dotCmd.Args, "--debug")
 	}
 
-	log.Debugf("Running command: %v", dotCmd.Args)
+	log.Debugf("Running dotfiles setup command: %v", dotCmd.Args)
 
 	writer := log.Writer(logrus.InfoLevel, false)
 
@@ -1113,7 +1113,7 @@ func buildDotCmd(dotfilesRepo, dotfilesScript string, envFiles, envKeyValuePairs
 		sshCmd...,
 	)
 
-	dotCmd.Env = append(os.Environ(), allEnvKeyValuesPairs...)
+	dotCmd.Env = append(dotCmd.Environ(), allEnvKeyValuesPairs...)
 	return dotCmd, nil
 }
 
