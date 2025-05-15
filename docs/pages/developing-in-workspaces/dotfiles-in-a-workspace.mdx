@@ -60,3 +60,21 @@ devpod context set-options -o DOTFILES_URL=https://github.com/89luca89/dotfiles 
 ```
 
 All new Workspaces will be created with that dotfile repository and install script.
+
+#### Setting Dotfiles Script Environment Variables (per context)
+
+You can also set environment variables for your dotfiles install script on a context-wide basis, so you don't have to specify them every time you run `devpod up`.
+
+For example, to set a variable for all workspaces on this machine or project:
+
+```
+devpod context set-options -o DOTFILES_SCRIPT_ENV=PERSONA=work,FOO=bar
+```
+
+You can still override or add variables for a specific workspace using the `--dotfiles-script-env` flag:
+
+```
+devpod up ... --dotfiles-script-env PERSONA=private
+```
+
+If both are set, the flag takes precedence for any duplicate variable names.

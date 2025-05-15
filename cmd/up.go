@@ -214,7 +214,33 @@ func (cmd *UpCmd) Run(
 	}
 
 	// setup dotfiles in the container
-	err = setupDotfiles(cmd.DotfilesSource, cmd.DotfilesScript, cmd.DotfilesScriptEnvFile, cmd.DotfilesScriptEnv, client, devPodConfig, log)
+	// Merge DOTFILES_SCRIPT_ENV context option with --dotfiles-script-env flag
+	contextDotfilesScriptEnv := devPodConfig.ContextOption(config.ContextOptionDotfilesScriptEnv)
+	mergedDotfilesScriptEnv := []string{}
+	contextEnvMap := map[string]string{}
+	if contextDotfilesScriptEnv != "" {
+		for _, pair := range strings.Split(contextDotfilesScriptEnv, ",") {
+			pair = strings.TrimSpace(pair)
+			if pair == "" {
+				continue
+			}
+			kv := strings.SplitN(pair, "=", 2)
+			if len(kv) == 2 {
+				contextEnvMap[kv[0]] = kv[1]
+			}
+		}
+	}
+	// Overlay/override with flag values
+	for _, pair := range cmd.DotfilesScriptEnv {
+		kv := strings.SplitN(pair, "=", 2)
+		if len(kv) == 2 {
+			contextEnvMap[kv[0]] = kv[1]
+		}
+	}
+	for k, v := range contextEnvMap {
+		mergedDotfilesScriptEnv = append(mergedDotfilesScriptEnv, k+"="+v)
+	}
+	err = setupDotfiles(cmd.DotfilesSource, cmd.DotfilesScript, cmd.DotfilesScriptEnvFile, mergedDotfilesScriptEnv, client, devPodConfig, log)
 	if err != nil {
 		return err
 	}
